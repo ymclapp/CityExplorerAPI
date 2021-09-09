@@ -1,10 +1,9 @@
 'use strict';
 
-const express = require('express');
-
-
 //Load Environment Variables from the .env file
 require('dotenv').config();
+
+const express = require ('express');
 
 const app = express();
 
@@ -21,9 +20,9 @@ app.get('/', (request, response) => {
 
 const weather = require('./data/weather.json');
 app.get('/weather', (request, response) => {
+  console.log('query', request.query);
   response.json(weather);
 });
-
 
 
 //Make sure the server is listening for requests.  Adding http et al. now you can click on the link to see the localhost running
