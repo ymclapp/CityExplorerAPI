@@ -19,10 +19,8 @@ app.get('/', (request, response) => {
 });
 
 // const weather = require('./data/weather.json');
-app.get('/weather', (request, response) => {
-  console.log('query', request.query);
-  response.send(getWeather());
-});
+app.get('/weather', getWeather);
+
 
 //Make sure the server is listening for requests.  Adding http et al. now you can click on the link to see the localhost running
 app.listen(PORT, () => console.log(`App is listening on http://localhost:${PORT}`));
@@ -33,37 +31,40 @@ const axios = require('axios');
 
 async function getWeather(request, response) {
   const q = request.query.q;
-  // let parts = 'alerts, minutely,current,hourly';
+  const appid =process.env.API_WEATHER_KEY;
+  const exclude = 'current,minutely,hourly,alerts';
   const lon = request.query.lon;
   const lat = request.query.lat;
 
   try {
-    const results = await axios.get('https://api.openweathermap.org/data/2.5/forecast/daily', {
+    const results = await axios.get('https://api.openweathermap.org/data/2.5/onecall?', {
       params:  {
         q,
-        lat: lat,
-        lon: lon,
-        cnt: 7,
-        appid:  process.env.API_WEATHER_KEY,
-        // query: q,
+        exclude,
+        lat,
+        lon,
+        // cnt: 7,
+        appid,
       },
     });
-
+    console.log(results.data.daily);
     let weatherData =
-      results.data.map(weather => new Weather(weather));
+      results.data.daily.map(weather => new Weather(weather));
 
     response.send(weatherData);
   }
   catch(err) {
     console.error('axios error!', err);
-    response.status(500).send('Negative Ghost Rider');
+    response.status(500).send('This is a Status 500.  Negative Ghost Rider the pattern is full.');
   }
 }
 
 
 class Weather {
   constructor(weatherData) {
-    this.description = weatherData.forecast;
-    // this.time = new Date (weatherData.forecast.time.day).toDateString;
+    // this.forecast = weatherData.timezone;
+    this.description = weatherData.weather[0].description;
+    this.time = new Date (weatherData.dt).toDateString();
+    // this.time = weatherData.dt;
   }
 }
