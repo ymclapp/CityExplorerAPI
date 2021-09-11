@@ -63,7 +63,8 @@ async function getWeather(request, response) {
 class Weather {
   constructor(weatherData) {
     // this.forecast = weatherData.timezone;
-    // this.description = weatherData.sunrise;
-    this.time = weatherData.dt;
+    this.description = weatherData.weather[0].description;
+    this.time = new Date (weatherData.dt).toDateString();
+    // this.time = weatherData.dt;
   }
 }
