@@ -9,7 +9,7 @@ async function getMovies(request, response) {
   try {
     const movieResults = await axios.get('https://api.themoviedb.org/3/search/movie?', {
       params:  {
-        query: response.query,
+        query: 'seattle',
         api_key,
         // language: 'en-US',
         // page: 1,

@@ -11,19 +11,19 @@ const app = express();
 const cors = require('cors');
 app.use(cors());
 
-//Application Setup
-const PORT = process.env.PORT || 3001;
-
+//routes
 app.get('/', (request, response) => {
   response.send('Home Page!');
 });
 
 // const weather = require('./data/weather.json');
 const weather = require('./modules/weather.js');
-const movies = require('./modules/movies.js');
 app.get('/weather', weather.getWeather);
+
+const movies = require('./modules/movies.js');
 app.get('/movies', movies.getMovies);
 
+const PORT = process.env.PORT || 3001;
 
 //Make sure the server is listening for requests.  Adding http et al. now you can click on the link to see the localhost running
 app.listen(PORT, () => console.log(`App is listening on http://localhost:${PORT}`));
